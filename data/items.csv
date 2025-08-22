@@ -2,12 +2,9 @@ Food Item,Storage,Expiry (days)
 Milk,Room Temp,2
 Milk,Fridge,7
 Milk,Freezer,90
-Eggs (raw, in shell),Room Temp,0
-Eggs (raw, in shell),Fridge,35
-Eggs (raw, in shell),Freezer,365
-Eggs (hard-boiled),Room Temp,0
-Eggs (hard-boiled),Fridge,7
-Eggs (hard-boiled),Freezer,90
+Eggs,Room Temp,0
+Eggs,Fridge,35
+Eggs,Freezer,365
 Apples,Room Temp,7
 Apples,Fridge,60
 Apples,Freezer,180
@@ -44,13 +41,13 @@ Kale,Freezer,300
 Corn (cooked),Room Temp,1
 Corn (cooked),Fridge,5
 Corn (cooked),Freezer,180
-Corn (raw, on cob),Room Temp,1
-Corn (raw, on cob),Fridge,5
-Corn (raw, on cob),Freezer,180
-Red Beans (canned, unopened),Room Temp,365
-Red Beans (canned, opened),Room Temp,0
-Red Beans (canned, opened),Fridge,5
-Red Beans (canned, opened),Freezer,180
+Corn (raw),Room Temp,1
+Corn (raw),Fridge,5
+Corn (raw),Freezer,180
+Red Beans (canned & unopened),Room Temp,365
+Red Beans (canned & opened),Room Temp,0
+Red Beans (canned & opened),Fridge,5
+Red Beans (canned & opened),Freezer,180
 Jam,Room Temp,365
 Jam,Fridge,60
 Jam,Freezer,365
