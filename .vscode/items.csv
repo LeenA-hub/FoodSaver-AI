@@ -1,0 +1,178 @@
+Food Item,Storage,Expiry (days)
+Milk,Room Temp,2
+Milk,Fridge,7
+Milk,Freezer,90
+Eggs (raw, in shell),Room Temp,0
+Eggs (raw, in shell),Fridge,35
+Eggs (raw, in shell),Freezer,365
+Eggs (hard-boiled),Room Temp,0
+Eggs (hard-boiled),Fridge,7
+Eggs (hard-boiled),Freezer,90
+Apples,Room Temp,7
+Apples,Fridge,60
+Apples,Freezer,180
+Spinach,Room Temp,1
+Spinach,Fridge,7
+Spinach,Freezer,365
+Beets,Room Temp,5
+Beets,Fridge,21
+Beets,Freezer,365
+Chicken (raw),Room Temp,0
+Chicken (raw),Fridge,2
+Chicken (raw),Freezer,365
+Chicken (cooked),Room Temp,0
+Chicken (cooked),Fridge,4
+Chicken (cooked),Freezer,180
+Bread,Room Temp,7
+Bread,Fridge,14
+Bread,Freezer,180
+Yogurt,Room Temp,0
+Yogurt,Fridge,14
+Yogurt,Freezer,90
+Tomato Paste,Room Temp,365
+Tomato Paste,Fridge,7
+Tomato Paste,Freezer,180
+Tomato,Room Temp,7
+Tomato,Fridge,14
+Tomato,Freezer,365
+Cucumber,Room Temp,2
+Cucumber,Fridge,10
+Cucumber,Freezer,90
+Kale,Room Temp,1
+Kale,Fridge,7
+Kale,Freezer,300
+Corn (cooked),Room Temp,1
+Corn (cooked),Fridge,5
+Corn (cooked),Freezer,180
+Corn (raw, on cob),Room Temp,1
+Corn (raw, on cob),Fridge,5
+Corn (raw, on cob),Freezer,180
+Red Beans (canned, unopened),Room Temp,365
+Red Beans (canned, opened),Room Temp,0
+Red Beans (canned, opened),Fridge,5
+Red Beans (canned, opened),Freezer,180
+Jam,Room Temp,365
+Jam,Fridge,60
+Jam,Freezer,365
+Pickles,Room Temp,365
+Pickles,Fridge,365
+Pickles,Freezer,365
+Beef (raw),Room Temp,0
+Beef (raw),Fridge,5
+Beef (raw),Freezer,365
+Toast,Room Temp,7
+Toast,Fridge,14
+Toast,Freezer,180
+Radish,Room Temp,2
+Radish,Fridge,10
+Radish,Freezer,90
+Potato,Room Temp,14
+Potato,Fridge,60
+Potato,Freezer,180
+Turkey (raw),Room Temp,0
+Turkey (raw),Fridge,2
+Turkey (raw),Freezer,365
+Salami/Paloni,Room Temp,2
+Salami/Paloni,Fridge,21
+Salami/Paloni,Freezer,90
+Zucchini,Room Temp,2
+Zucchini,Fridge,10
+Zucchini,Freezer,90
+Lettuce,Room Temp,1
+Lettuce,Fridge,7
+Lettuce,Freezer,90
+Fish (raw),Room Temp,0
+Fish (raw),Fridge,2
+Fish (raw),Freezer,180
+Nuggets (cooked),Room Temp,0
+Nuggets (cooked),Fridge,4
+Nuggets (cooked),Freezer,90
+Rice (cooked),Room Temp,0
+Rice (cooked),Fridge,6
+Rice (cooked),Freezer,180
+Flour,Room Temp,365
+Flour,Fridge,365
+Flour,Freezer,365
+Brown Sugar,Room Temp,365
+Brown Sugar,Fridge,365
+Brown Sugar,Freezer,365
+White Sugar,Room Temp,365
+White Sugar,Fridge,365
+White Sugar,Freezer,365
+Parsley,Room Temp,1
+Parsley,Fridge,7
+Parsley,Freezer,180
+Watermelon,Room Temp,7
+Watermelon,Fridge,10
+Watermelon,Freezer,180
+Peaches,Room Temp,5
+Peaches,Fridge,14
+Peaches,Freezer,180
+Soda (unopened),Room Temp,365
+Soda (unopened),Fridge,365
+Grapes,Room Temp,2
+Grapes,Fridge,7
+Grapes,Freezer,180
+Broccoli,Room Temp,1
+Broccoli,Fridge,7
+Broccoli,Freezer,365
+Lemon,Room Temp,7
+Lemon,Fridge,21
+Lemon,Freezer,180
+Hotdogs (raw),Room Temp,0
+Hotdogs (raw),Fridge,5
+Hotdogs (raw),Freezer,180
+Green Onions,Room Temp,2
+Green Onions,Fridge,10
+Green Onions,Freezer,90
+Onions,Room Temp,60
+Onions,Fridge,60
+Onions,Freezer,180
+Sprouts,Room Temp,1
+Sprouts,Fridge,5
+Sprouts,Freezer,90
+Hash Browns,Room Temp,0
+Hash Browns,Fridge,2
+Hash Browns,Freezer,180
+Salmon (raw),Room Temp,0
+Salmon (raw),Fridge,2
+Salmon (raw),Freezer,180
+Frozen Fruits,Room Temp,0
+Frozen Fruits,Fridge,0
+Frozen Fruits,Freezer,365
+Berries,Room Temp,2
+Berries,Fridge,7
+Berries,Freezer,180
+Cheese (hard),Room Temp,7
+Cheese (hard),Fridge,60
+Cheese (hard),Freezer,180
+Mushrooms,Room Temp,1
+Mushrooms,Fridge,7
+Mushrooms,Freezer,90
+Peppers,Room Temp,5
+Peppers,Fridge,10
+Peppers,Freezer,180
+Ginger,Room Temp,14
+Ginger,Fridge,30
+Ginger,Freezer,180
+Turmeric,Room Temp,365
+Turmeric,Fridge,365
+Turmeric,Freezer,365
+Pears,Room Temp,5
+Pears,Fridge,14
+Pears,Freezer,180
+Avocado,Room Temp,2
+Avocado,Fridge,5
+Avocado,Freezer,180
+Mango,Room Temp,5
+Mango,Fridge,7
+Mango,Freezer,180
+Pudding,Room Temp,0
+Pudding,Fridge,7
+Pudding,Freezer,90
+Hummus,Room Temp,0
+Hummus,Fridge,7
+Hummus,Freezer,90
+Chickpeas (cooked),Room Temp,0
+Chickpeas (cooked),Fridge,5
+Chickpeas (cooked),Freezer,180
