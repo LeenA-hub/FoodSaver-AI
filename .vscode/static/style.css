@@ -60,7 +60,20 @@ body {
 }
 
 .start-btn:hover {
-  background-color: #3a6545;
+  margin-top: 50px;
+  width: 353px;   /* fixed width */
+  height: 131px;  /* fixed height */
+  background-color: #2e5339;
+  color: #e2ddae;
+  font-size: 28px;
+  font-weight: bold;
+  border: 3px solid #2e5339;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  display: flex;              /* center text */
+  align-items: center;
+  justify-content: center;
 }
 
 .start-btn:active {
@@ -68,6 +81,18 @@ body {
 }
 
 .start-btn:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px #e2ddae, 0 0 0 6px #2e5339;
+  margin-top: 50px;
+  width: 353px;   /* fixed width */
+  height: 131px;  /* fixed height */
+  background-color: #2e5339;
+  color: #e2ddae;
+  font-size: 28px;
+  font-weight: bold;
+  border: 3px solid #2e5339;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  display: flex;              /* center text */
+  align-items: center;
+  justify-content: center;
 }
