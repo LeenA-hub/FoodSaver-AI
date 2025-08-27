@@ -87,27 +87,91 @@ body {
 
 
 
+
+/* Content Page Styles */
+.main-title {
+  color: #2E5339;              /* Dark green */
+  text-align: center;          /* Centered */
+  font-family: Poppins, sans-serif; /* Modern font */
+  font-size: 60px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+.subtitle {
+  color: #2E5339;              /* Dark green */
+  text-align: center;          /* Centered */
+  font-family: Nunito; /* Modern font */
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-top: 2px;            /* Space below title */
+  margin-bottom: 0;         /* Space below subtitle */
+}
+
+
 .scroll-container {
     display: flex;
-    overflow-x: auto;
     gap: 20px;
+    overflow-x: auto;
     padding: 20px;
 }
 
 .box {
-    flex: 0 0 auto;
-    width: 200px;
-    height: 120px;
-    background: #007bff;
+    background-color: #E07A5F;
     color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 12px;
+    border-radius: 30px;
+    width: 352px;
+    height: 344px;
+    position: relative;
+    flex-shrink: 0;
     cursor: pointer;
-    transition: 0.3s;
+    text-align: left;
+    display: flex;
+    padding: 10px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    align-self: stretch;
+    transition: transform 0.3s, box-shadow 0.3s;
 }
 
-.box:hover {
-    background: #0056b3;
+.box:nth-child(2) {
+    background-color: #D95F4E;
+}
+.box:nth-child(3) {
+    background-color: #8C9A6D;
+}
+.box:nth-child(4) {
+    background-color: #4E7D73;
+}
+
+.text h2 {
+color: #FFF;
+font-family: Baloo;
+font-size: 56px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+}
+
+.text p {
+color: #FFF;
+font-family: Baloo;
+font-size: 14px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+margin-top: 2px; 
+}
+
+
+.box img {
+    width: 220px;
+    height: auto;
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    
 }

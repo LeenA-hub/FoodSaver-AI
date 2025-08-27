@@ -5,26 +5,40 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <h1>Content</h1>
-    <p>Everything you need to manage your fridge, track expiry dates and shop smarter with AI Assistant</p>
-   <div class="scroll-container">
-    <div class="box" onclick="window.location.href='/fridge'">
-        <img src="{{ url_for('static', filename='images/fridge2.png') }}" alt="Fridge2">
-        <span>Fridge</span>
-    </div>
-    <div class="box" onclick="window.location.href='/predict'">
-        <img src="{{ url_for('static', filename='images/pred.png') }}" alt="Prediction">
-        <span>Prediction</span>
-    </div>
-    <div class="box" onclick="window.location.href='/shopping'">
-        <img src="{{ url_for('static', filename='images/shoppinglist.png') }}" alt="Shopping List">
-        <span>Shopping List</span>
-    </div>
-    <div class="box" onclick="window.location.href='/cooking'">
-        <img src="{{ url_for('static', filename='images/cooking.png') }}" alt="Cooking Bot">
-        <span>Cooking Bot</span>
-    </div>
-</div>
+<h1 class="main-title">Content</h1>
+    <p class="subtitle">Everything you need to manage your fridge, track expiry dates and shop smarter with AI Assistant</p>
+    <div class="scroll-container">
+        <div class="box" onclick="window.location.href='/fridge'">
+            <div class="text">
+                <h2>Fridge</h2>
+                <p>Your fridge,<br>your list</p>
+            </div>
+            <img src="{{ url_for('static', filename='images/fridge3.png') }}" alt="Fridge">
+        </div>
 
+        <div class="box" onclick="window.location.href='/predict'">
+            <div class="text">
+                <h2>Prediction</h2>
+                <p>Track fridge expiry dates<br>with AI.</p>
+            </div>
+            <img src="{{ url_for('static', filename='images/pred2.png') }}" alt="Prediction">
+        </div>
+
+        <div class="box" onclick="window.location.href='/shopping'">
+            <div class="text">
+                <h2>Shopping</h2>
+                <p>Don't forget<br>the essentials</p>
+            </div>
+            <img src="{{ url_for('static', filename='images/shopping2.png') }}" alt="Shopping">
+        </div>
+
+        <div class="box" onclick="window.location.href='/cooking'">
+            <div class="text">
+                <h2>AI Cooking Assistant</h2>
+                <p>Not sure what to cook?<br>Ask the bot!</p>
+            </div>
+            <img src="{{ url_for('static', filename='images/cooking2.png') }}" alt="Cooking Bot">
+        </div>
+    </div>
 </body>
 </html>
