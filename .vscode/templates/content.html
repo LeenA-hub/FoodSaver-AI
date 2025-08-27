@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Content</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <h1>Content</h1>
+    <p>Everything you need to manage your fridge, track expiry dates and shop smarter with AI Assistant</p>
+   <div class="scroll-container">
+    <div class="box" onclick="window.location.href='/fridge'">
+        <img src="{{ url_for('static', filename='images/fridge2.png') }}" alt="Fridge2">
+        <span>Fridge</span>
+    </div>
+    <div class="box" onclick="window.location.href='/predict'">
+        <img src="{{ url_for('static', filename='images/pred.png') }}" alt="Prediction">
+        <span>Prediction</span>
+    </div>
+    <div class="box" onclick="window.location.href='/shopping'">
+        <img src="{{ url_for('static', filename='images/shoppinglist.png') }}" alt="Shopping List">
+        <span>Shopping List</span>
+    </div>
+    <div class="box" onclick="window.location.href='/cooking'">
+        <img src="{{ url_for('static', filename='images/cooking.png') }}" alt="Cooking Bot">
+        <span>Cooking Bot</span>
+    </div>
+</div>
+
+</body>
+</html>
