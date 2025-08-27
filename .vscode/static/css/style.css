@@ -175,3 +175,66 @@ margin-top: 2px;
     bottom: 10px;
     
 }
+.box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+/* Darker hover shades */
+.box:hover {
+    background-color: #c76c52; /* darker for first box */
+}
+.box:nth-child(2):hover {
+    background-color: #bf5243;
+}
+.box:nth-child(3):hover {
+    background-color: #76825a;
+}
+.box:nth-child(4):hover {
+    background-color: #3f655d;
+}
+
+/*fridge css page*/
+
+
+.big-box {
+  width: 90%;
+  height: 600px;         /* fixed height so it scrolls */
+  margin: auto;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  overflow-y: scroll;     /* vertical scroll */
+  background: white;
+  padding: 20px;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);  /* 3 columns */
+  gap: 20px;
+}
+
+.small-box {
+  text-align: center;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background: #fafafa;
+  transition: transform 0.2s ease;
+}
+
+.small-box:hover {
+  transform: scale(1.05);
+}
+
+.small-box img {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+}
+
+.small-box p {
+  margin-top: 8px;
+  font-size: 16px;
+  font-weight: bold;
+}
