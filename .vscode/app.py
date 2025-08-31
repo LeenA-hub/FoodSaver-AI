@@ -1,5 +1,4 @@
 
-app = Flask(__name__)
 
 # Load ML model
 from flask import Flask, render_template, request, redirect, url_for
