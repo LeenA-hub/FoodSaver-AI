@@ -33,16 +33,16 @@
   }
   .shopping-container {
     display: flex;
-    overflow-x: auto;
+    flex-direction: column; /* vertical stacking */
     padding: 20px;
     gap: 10px;
     background: #de935f;
     border-radius: 20px;
+    align-items: center; /* center horizontally */
   }
   .item-box {
-    flex: 0 0 auto;
     background: #607d8b;
-    width: 150px;
+    width: 300px; /* long horizontally */
     height: 80px;
     border-radius: 10px;
     display: flex;
@@ -52,6 +52,8 @@
     color: white;
     font-weight: bold;
     cursor: pointer;
+    text-align: center;
+    padding: 0 10px;
   }
   .item-box.checked {
     display: none;
@@ -64,12 +66,17 @@
     height: 20px;
     cursor: pointer;
   }
+  .item-text {
+    width: 100%;
+    text-align: center;
+    pointer-events: none;
+  }
 </style>
 </head>
 <body>
 
 <h1>Shopping List</h1>
-<p>adding the items ur missing:</p>
+<p>Adding the items you are missing:</p>
 
 <div class="input-container">
   <input type="text" id="itemInput" placeholder="Enter item">
@@ -82,9 +89,9 @@
 
 <script>
   const shoppingContainer = document.getElementById('shoppingContainer');
+  const input = document.getElementById('itemInput');
 
   function addItem() {
-    const input = document.getElementById('itemInput');
     const value = input.value.trim();
     if(value === "") return;
 
@@ -95,8 +102,7 @@
     checkbox.type = 'checkbox';
     checkbox.addEventListener('change', () => {
       if(checkbox.checked) {
-        // Simulate adding to fridge database
-        box.style.background = '#1e88e5'; // blue for existing in fridge
+        box.style.background = '#1e88e5';
         setTimeout(() => {
           box.classList.add('checked');
         }, 300);
@@ -106,13 +112,21 @@
     box.appendChild(checkbox);
 
     const text = document.createElement('span');
+    text.className = 'item-text';
     text.textContent = value;
     box.appendChild(text);
 
     shoppingContainer.appendChild(box);
 
     input.value = '';
+    input.focus();
   }
+
+  input.addEventListener('keypress', function(e) {
+    if(e.key === 'Enter') {
+      addItem();
+    }
+  });
 </script>
 
 </body>
