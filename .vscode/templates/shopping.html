@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Shopping List</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <h2>Shopping List</h2>
+    <input type="text" id="shop-input" placeholder="Add item">
+    <button onclick="addItem()">Add</button>
+
+    <div class="scroll-container" id="shop-list"></div>
+
+    <script>
+        function addItem() {
+            let input = document.getElementById("shop-input");
+            let value = input.value.trim();
+            if (value) {
+                let box = document.createElement("div");
+                box.className = "box";
+                box.innerHTML = `<input type="checkbox" onclick="doneItem(this)"> ${value}`;
+                document.getElementById("shop-list").appendChild(box);
+                input.value = "";
+            }
+        }
+
+        function doneItem(cb) {
+            cb.parentElement.remove();
+            // TODO: Add to fridge DB
+        }
+    </script>
+</body>
+</html>
