@@ -113,11 +113,31 @@
 
 
   <script>
-    // Fake dataset example
-    let fridgeDataset = {
-      "tomato": { exists: true, daysLeft: 7 },
-      "lettuce": { exists: true, daysLeft: 2 } // will expire soon
-    };
+  let fridgeDataset = {};
+
+fetch("/fridge_data")
+  .then(res => res.json())
+  .then(data => {
+    fridgeDataset = data;
+    updateBoxes();
+  });
+
+  function updateBoxes() {
+  document.querySelectorAll(".small-box").forEach(box => {
+    let name = box.dataset.name;
+    box.classList.remove("default", "exists", "expiring");
+
+    if (fridgeDataset[name]) {
+      if (fridgeDataset[name].daysLeft <= 3) {
+        box.classList.add("expiring"); // red
+      } else {
+        box.classList.add("exists"); // green
+      }
+    } else {
+      box.classList.add("default"); // grey
+    }
+  });
+}
 
     // Apply dataset colors
     document.querySelectorAll(".small-box").forEach(box => {
@@ -134,18 +154,34 @@
 
       // Single click → mark exists
       box.addEventListener("click", () => {
-        fridgeDataset[name] = { exists: true, daysLeft: 7 };
-        box.classList.remove("default", "expiring");
-        box.classList.add("exists");
-      });
+       fridgeDataset[name] = { exists: true, daysLeft: 7 };
+  updateBoxes();
+
+  // Save to backend with current date
+  fetch("/save_item", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ item: name, daysLeft: 7 })
+  });
+});
+
 
       // Double click → reset to default
       box.addEventListener("dblclick", () => {
         delete fridgeDataset[name]; // remove from dataset
         box.classList.remove("exists", "expiring");
         box.classList.add("default");
+
+        updateBoxes();
+
+  fetch("/remove_item", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ item: name })
+  });
+});
       });
-    });
+   
 
     // Search filter
     document.getElementById("searchBar").addEventListener("keyup", function() {
