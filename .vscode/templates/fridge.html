@@ -3,49 +3,67 @@
 <head>
   <meta charset="UTF-8">
   <title>Fridge Items</title>
-  <style>
-    body { font-family: Arial, sans-serif; background: #fdf4d5; padding: 20px; }
-    h2 { margin-bottom: 10px; }
+ <style>
+  body { 
+    font-family: Arial, sans-serif; 
+    background: #fff4b6; /* your theme bg */
+    padding: 20px; 
+    color: #333; 
+  }
 
-    .search-container { margin-bottom: 15px; }
-    #searchBar {
-      padding: 8px; width: 250px;
-      border-radius: 6px; border: 1px solid #ccc;
-    }
-    button {
-      padding: 8px 12px; border: none;
-      background: #6ca6f9; color: white;
-      border-radius: 6px; cursor: pointer;
-    }
+  h2 { margin-bottom: 10px; }
 
-    .grid-container {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      grid-auto-rows: 150px;
-      gap: 10px;
-      max-height: 600px;
-      overflow-y: auto;
-      padding: 10px;
-      border: 2px solid #ccc;
-      border-radius: 10px;
-      background: #fff7e6;
-    }
+  .search-container { margin-bottom: 15px; }
+  #searchBar {
+    padding: 8px; width: 250px;
+    border-radius: 6px; border: 1px solid #ccc;
+  }
 
-    .small-box {
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      background: white; border-radius: 12px;
-      padding: 10px; cursor: pointer;
-      transition: 0.3s; border: 2px solid #ddd;
-    }
-    .small-box img { width: 50px; height: 50px; margin-bottom: 5px; }
-    .small-box:hover { transform: scale(1.05); }
+  button {
+    padding: 8px 12px; border: none;
+    background: #4E7D73; /* your theme green */
+    color: #FFF6EF; /* matches neutral tone */
+    border-radius: 6px; cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s;
+  }
+  button:hover {
+    background: #3b5d56; /* darker shade of your green */
+  }
 
-    /* Status colors */
-    .small-box.default { background: white; }
-    .small-box.exists { background: #6ca6f9; color: white; }
-    .small-box.expiring { background: #e65c4f; color: white; }
-  </style>
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 150px;
+    gap: 10px;
+    max-height: 600px;
+    overflow-y: auto;
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    background: #8C9A6D; /* your theme olive */
+  }
+
+  .small-box {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    background: #FFF6EF; 
+    border-radius: 12px;
+    padding: 10px; cursor: pointer;
+    transition: 0.3s; 
+    border: 2px solid #ddd;
+    color: #333; /* ensures readability */
+  }
+  .small-box img { width: 50px; height: 50px; margin-bottom: 5px; }
+  .small-box:hover { transform: scale(1.05); }
+
+  /* Status colors */
+  .small-box.default { background: #FFF6EF; color: #333; }
+  .small-box.exists { background: #4E7D73; color:#FFF6EF; }
+  .small-box.expiring { background: #e65c4f; color:#FFF6EF; }
+</style>
+
+
 </head>
 <body>
   <h2>Select Items For Your Fridge:</h2>
@@ -58,40 +76,41 @@
 
   <!-- Items Grid -->
   <div class="grid-container" id="itemsGrid">
-    <div class="small-box" data-name="tomato"><img src="images/tomato.png"><p>tomato</p></div>
-    <div class="small-box" data-name="broccoli"><img src="images/broccli.png"><p>broccoli</p></div>
-    <div class="small-box" data-name="lettuce"><img src="images/lattus.png"><p>lettuce</p></div>
-    <div class="small-box" data-name="mushroom"><img src="images/mushroom.png"><p>mushroom</p></div>
-    <div class="small-box" data-name="pepper"><img src="images/pepper.png"><p>pepper</p></div>
-    <div class="small-box" data-name="spinach"><img src="images/spinach.png"><p>spinach</p></div>
-    <div class="small-box" data-name="cucumber"><img src="images/cucumber.png"><p>cucumber</p></div>
-    <div class="small-box" data-name="beets"><img src="images/beet.png"><p>beets</p></div>
-    <div class="small-box" data-name="carrot"><img src="images/carrot.png"><p>carrot</p></div>
-    <div class="small-box" data-name="eggplant"><img src="images/eggplant.png"><p>eggplant</p></div>
-    <div class="small-box" data-name="onion"><img src="images/onion.png"><p>onion</p></div>
-    <div class="small-box" data-name="apple"><img src="images/apple.png"><p>apple</p></div>
-    <div class="small-box" data-name="banana"><img src="images/banana.png"><p>banana</p></div>
-    <div class="small-box" data-name="avocado"><img src="images/avacado.png"><p>avocado</p></div>
-    <div class="small-box" data-name="cheese"><img src="images/cheese.png"><p>cheese</p></div>
-    <div class="small-box" data-name="corn"><img src="images/corn.png"><p>corn</p></div>
-    <div class="small-box" data-name="eggs"><img src="images/eggs.png"><p>eggs</p></div>
-    <div class="small-box" data-name="lemon"><img src="images/lemon.png"><p>lemon</p></div>
-    <div class="small-box" data-name="milk"><img src="images/milk.png"><p>milk</p></div>
-    <div class="small-box" data-name="fish"><img src="images/fish.png"><p>fish</p></div>
-    <div class="small-box" data-name="chicken"><img src="images/chicken.png"><p>chicken</p></div>
-    <div class="small-box" data-name="bread"><img src="images/bread.png"><p>bread</p></div>
-    <div class="small-box" data-name="berries"><img src="images/berries.png"><p>berries</p></div>
-    <div class="small-box" data-name="orange"><img src="images/orange.png"><p>orange</p></div>
-    <div class="small-box" data-name="hot-dog"><img src="images/hotdogs.png"><p>hot-dog</p></div>
-    <div class="small-box" data-name="watermelon"><img src="images/watermelon.png"><p>watermelon</p></div>
-    <div class="small-box" data-name="potatoes"><img src="images/potatos.png"><p>potatoes</p></div>
-    <div class="small-box" data-name="rice"><img src="images/rice.png"><p>rice</p></div>
-    <div class="small-box" data-name="meat"><img src="images/meat.png"><p>meat</p></div>
-    <div class="small-box" data-name="peach"><img src="images/peach.png"><p>peach</p></div>
-    <div class="small-box" data-name="radish"><img src="images/radish.png"><p>radish</p></div>
-    <div class="small-box" data-name="red beans"><img src="images/redbeans.png"><p>red beans</p></div>
-    <div class="small-box" data-name="tomato paste"><img src="images/tomato_paste.png"><p>tomato paste</p></div>
-  </div>
+  <div class="small-box" data-name="tomato"><img src="{{ url_for('static', filename='images/tomato.png') }}"><p>tomato</p></div>
+  <div class="small-box" data-name="broccoli"><img src="{{ url_for('static', filename='images/broccli.png') }}"><p>broccoli</p></div>
+  <div class="small-box" data-name="lettuce"><img src="{{ url_for('static', filename='images/lattus.png') }}"><p>lettuce</p></div>
+  <div class="small-box" data-name="mushroom"><img src="{{ url_for('static', filename='images/mushroom.png') }}"><p>mushroom</p></div>
+  <div class="small-box" data-name="pepper"><img src="{{ url_for('static', filename='images/pepper.png') }}"><p>pepper</p></div>
+  <div class="small-box" data-name="spinach"><img src="{{ url_for('static', filename='images/spinach .png') }}"><p>spinach</p></div>
+  <div class="small-box" data-name="cucumber"><img src="{{ url_for('static', filename='images/cucumber.png') }}"><p>cucumber</p></div>
+  <div class="small-box" data-name="beets"><img src="{{ url_for('static', filename='images/beet.png') }}"><p>beets</p></div>
+  <div class="small-box" data-name="carrot"><img src="{{ url_for('static', filename='images/carrot.png') }}"><p>carrot</p></div>
+  <div class="small-box" data-name="eggplant"><img src="{{ url_for('static', filename='images/eggplant.png') }}"><p>eggplant</p></div>
+  <div class="small-box" data-name="onion"><img src="{{ url_for('static', filename='images/onion.png') }}"><p>onion</p></div>
+  <div class="small-box" data-name="apple"><img src="{{ url_for('static', filename='images/apple.png') }}"><p>apple</p></div>
+  <div class="small-box" data-name="banana"><img src="{{ url_for('static', filename='images/banana.png') }}"><p>banana</p></div>
+  <div class="small-box" data-name="avocado"><img src="{{ url_for('static', filename='images/avacado.png') }}"><p>avocado</p></div>
+  <div class="small-box" data-name="cheese"><img src="{{ url_for('static', filename='images/cheese.png') }}"><p>cheese</p></div>
+  <div class="small-box" data-name="corn"><img src="{{ url_for('static', filename='images/corn.png') }}"><p>corn</p></div>
+  <div class="small-box" data-name="eggs"><img src="{{ url_for('static', filename='images/eggs.png') }}"><p>eggs</p></div>
+  <div class="small-box" data-name="lemon"><img src="{{ url_for('static', filename='images/lemon.png') }}"><p>lemon</p></div>
+  <div class="small-box" data-name="milk"><img src="{{ url_for('static', filename='images/milk.png') }}"><p>milk</p></div>
+  <div class="small-box" data-name="fish"><img src="{{ url_for('static', filename='images/fish.png') }}"><p>fish</p></div>
+  <div class="small-box" data-name="chicken"><img src="{{ url_for('static', filename='images/chicken.png') }}"><p>chicken</p></div>
+  <div class="small-box" data-name="bread"><img src="{{ url_for('static', filename='images/bread.png') }}"><p>bread</p></div>
+  <div class="small-box" data-name="berries"><img src="{{ url_for('static', filename='images/berries.png') }}"><p>berries</p></div>
+  <div class="small-box" data-name="orange"><img src="{{ url_for('static', filename='images/orange.png') }}"><p>orange</p></div>
+  <div class="small-box" data-name="hot-dog"><img src="{{ url_for('static', filename='images/hotdogs.png') }}"><p>hot-dog</p></div>
+  <div class="small-box" data-name="watermelon"><img src="{{ url_for('static', filename='images/watermelon.png') }}"><p>watermelon</p></div>
+  <div class="small-box" data-name="potatoes"><img src="{{ url_for('static', filename='images/potatos.png') }}"><p>potatoes</p></div>
+  <div class="small-box" data-name="rice"><img src="{{ url_for('static', filename='images/rice.png') }}"><p>rice</p></div>
+  <div class="small-box" data-name="meat"><img src="{{ url_for('static', filename='images/meat.png') }}"><p>meat</p></div>
+  <div class="small-box" data-name="peach"><img src="{{ url_for('static', filename='images/peach.png') }}"><p>peach</p></div>
+  <div class="small-box" data-name="radish"><img src="{{ url_for('static', filename='images/radish.png') }}"><p>radish</p></div>
+  <div class="small-box" data-name="red beans"><img src="{{ url_for('static', filename='images/redbeans.png') }}"><p>red beans</p></div>
+  <div class="small-box" data-name="tomato paste"><img src="{{ url_for('static', filename='images/tomato_paste.png') }}"><p>tomato paste</p></div>
+</div>
+
 
   <script>
     // Fake dataset example
