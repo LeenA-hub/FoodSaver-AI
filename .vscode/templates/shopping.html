@@ -1,33 +1,119 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Shopping List</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shopping List</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #fff4b6;
+    padding: 20px;
+    color: #333;
+  }
+  h1 {
+    font-size: 48px;
+    text-align: center;
+    color: #2e4f2e;
+  }
+  p {
+    text-align: center;
+    color: #2e4f2e;
+  }
+  .input-container {
+    text-align: center;
+    margin: 20px 0;
+  }
+  input[type="text"] {
+    padding: 10px;
+    font-size: 16px;
+    width: 200px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+  .shopping-container {
+    display: flex;
+    overflow-x: auto;
+    padding: 20px;
+    gap: 10px;
+    background: #de935f;
+    border-radius: 20px;
+  }
+  .item-box {
+    flex: 0 0 auto;
+    background: #607d8b;
+    width: 150px;
+    height: 80px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  .item-box.checked {
+    display: none;
+  }
+  .item-box input[type="checkbox"] {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+  }
+</style>
 </head>
 <body>
-    <h2>Shopping List</h2>
-    <input type="text" id="shop-input" placeholder="Add item">
-    <button onclick="addItem()">Add</button>
 
-    <div class="scroll-container" id="shop-list"></div>
+<h1>Shopping List</h1>
+<p>adding the items ur missing:</p>
 
-    <script>
-        function addItem() {
-            let input = document.getElementById("shop-input");
-            let value = input.value.trim();
-            if (value) {
-                let box = document.createElement("div");
-                box.className = "box";
-                box.innerHTML = `<input type="checkbox" onclick="doneItem(this)"> ${value}`;
-                document.getElementById("shop-list").appendChild(box);
-                input.value = "";
-            }
-        }
+<div class="input-container">
+  <input type="text" id="itemInput" placeholder="Enter item">
+  <button onclick="addItem()">Add</button>
+</div>
 
-        function doneItem(cb) {
-            cb.parentElement.remove();
-            // TODO: Add to fridge DB
-        }
-    </script>
+<div class="shopping-container" id="shoppingContainer">
+  <!-- Item boxes will appear here -->
+</div>
+
+<script>
+  const shoppingContainer = document.getElementById('shoppingContainer');
+
+  function addItem() {
+    const input = document.getElementById('itemInput');
+    const value = input.value.trim();
+    if(value === "") return;
+
+    const box = document.createElement('div');
+    box.className = 'item-box';
+
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.addEventListener('change', () => {
+      if(checkbox.checked) {
+        // Simulate adding to fridge database
+        box.style.background = '#1e88e5'; // blue for existing in fridge
+        setTimeout(() => {
+          box.classList.add('checked');
+        }, 300);
+      }
+    });
+
+    box.appendChild(checkbox);
+
+    const text = document.createElement('span');
+    text.textContent = value;
+    box.appendChild(text);
+
+    shoppingContainer.appendChild(box);
+
+    input.value = '';
+  }
+</script>
+
 </body>
 </html>
