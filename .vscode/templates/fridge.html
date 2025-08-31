@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -113,11 +113,18 @@
         box.classList.add("default");
       }
 
-      // Clicking adds to dataset
+      // Single click → mark exists
       box.addEventListener("click", () => {
         fridgeDataset[name] = { exists: true, daysLeft: 7 };
         box.classList.remove("default", "expiring");
         box.classList.add("exists");
+      });
+
+      // Double click → reset to default
+      box.addEventListener("dblclick", () => {
+        delete fridgeDataset[name]; // remove from dataset
+        box.classList.remove("exists", "expiring");
+        box.classList.add("default");
       });
     });
 
@@ -150,6 +157,12 @@
         fridgeDataset[newItem.toLowerCase()] = { exists: true, daysLeft: 7 };
         div.classList.remove("default", "expiring");
         div.classList.add("exists");
+      });
+
+      div.addEventListener("dblclick", () => {
+        delete fridgeDataset[newItem.toLowerCase()];
+        div.classList.remove("exists", "expiring");
+        div.classList.add("default");
       });
 
       grid.appendChild(div);
