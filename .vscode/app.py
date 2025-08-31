@@ -6,7 +6,8 @@ app = Flask(__name__)
 # Load ML model
 from flask import Flask, render_template, request, redirect, url_for
 import pickle
-import os   # <-- you need this
+import os 
+import csv
 
 app = Flask(__name__)
 
@@ -46,3 +47,23 @@ def cooking():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+DATA_FILE = "saved_items.csv"
+
+# Utility: Save item
+def save_item(item, storage):
+    file_exists = os.path.isfile(DATA_FILE)
+    with open(DATA_FILE, "a", newline="") as f:
+        writer = csv.writer(f)
+        if not file_exists:  # add header if file doesn’t exist
+            writer.writerow(["item", "storage"])
+        writer.writerow([item, storage])
+
+# Utility: Load items
+def load_items():
+    items = []
+    if os.path.isfile(DATA_FILE):
+        with open(DATA_FILE, "r") as f:
+            reader = csv.DictReader(f)
+            items = list(reader)
+    return items

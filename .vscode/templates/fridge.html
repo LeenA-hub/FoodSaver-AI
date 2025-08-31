@@ -187,6 +187,13 @@
       grid.appendChild(div);
       input.value = "";
     }
+
+    fetch("/save", {
+  method: "POST",
+  headers: {"Content-Type": "application/json"},
+  body: JSON.stringify(dataset)
+});
+
   </script>
 </body>
 </html>
