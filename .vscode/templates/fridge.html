@@ -2,12 +2,17 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Scrollable Boxes</title>
+  <title>Fridge Items</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="big-box">
-    <div class="grid-container">
+  <h2>Select Items For Your Fridge:</h2>
+
+  <!-- Search bar -->
+  <div class="search-container">
+    <input type="text" id="searchBar" placeholder="Search or add item...">
+    <button onclick="addManualItem()">Add</button>
+  </div>
       <!-- Repeat this for 33 items -->
 <div class="small-box">
   <img src="{{ url_for('static', filename='images/tomato.png') }}" alt="tomato">
@@ -35,7 +40,7 @@
 </div>
 
 <div class="small-box">
-  <img src="{{ url_for('static', filename='images/spinich.png') }}" alt="spinich">
+  <img src="{{ url_for('static', filename='images/spinach.png') }}" alt="spinach">
   <p>spinach</p>
 </div>
 
@@ -173,3 +178,68 @@
   <img src="{{ url_for('static', filename='images/tomato_paste.png') }}" alt="tomato paste">
   <p>tomato paste</p>
 </div>
+ <script>
+    // Fake dataset example
+    let fridgeDataset = {
+      "tomato": { exists: true, daysLeft: 7 },
+      "lettuce": { exists: true, daysLeft: 2 } // will expire soon
+    };
+
+    // Apply dataset colors
+    document.querySelectorAll(".small-box").forEach(box => {
+      let name = box.dataset.name;
+      if (fridgeDataset[name]) {
+        if (fridgeDataset[name].daysLeft <= 3) {
+          box.classList.add("expiring");
+        } else {
+          box.classList.add("exists");
+        }
+      } else {
+        box.classList.add("default");
+      }
+
+      // Clicking adds to dataset
+      box.addEventListener("click", () => {
+        fridgeDataset[name] = { exists: true, daysLeft: 7 }; 
+        box.classList.remove("default", "expiring");
+        box.classList.add("exists");
+      });
+    });
+
+    // Search filter
+    document.getElementById("searchBar").addEventListener("keyup", function() {
+      let filter = this.value.toLowerCase();
+      let boxes = document.querySelectorAll(".small-box");
+      boxes.forEach(box => {
+        let name = box.dataset.name.toLowerCase();
+        box.style.display = name.includes(filter) ? "flex" : "none";
+      });
+    });
+
+    // Add new item manually
+    function addManualItem() {
+      let input = document.getElementById("searchBar");
+      let newItem = input.value.trim();
+      if (!newItem) return;
+
+      let grid = document.getElementById("itemsGrid");
+
+      // Create new box
+      let div = document.createElement("div");
+      div.className = "small-box default";
+      div.dataset.name = newItem.toLowerCase();
+      div.innerHTML = `<img src="images/default.png" alt="${newItem}">
+                      <p>${newItem}</p>`;
+
+      div.addEventListener("click", () => {
+        fridgeDataset[newItem.toLowerCase()] = { exists: true, daysLeft: 7 };
+        div.classList.remove("default", "expiring");
+        div.classList.add("exists");
+      });
+
+      grid.appendChild(div);
+      input.value = "";
+    }
+  </script>
+</body>
+</html>
