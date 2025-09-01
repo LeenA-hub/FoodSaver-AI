@@ -1,19 +1,18 @@
-
-
-# Load ML model
-from flask import Flask, render_template, request, redirect, url_for
-import pickle
-import os 
+from flask import Flask, render_template, request, jsonify
+import os
 import csv
-from datetime import datetime, timedelta
-import jsonify
+from datetime import datetime
+import joblib
+import numpy as np
 import pandas as pd
-import os 
-import csv
 
 app = Flask(__name__)
 
+# -----------------
+# Config & Setup
+# -----------------
 CSV_FILE = 'fridge_dataset.csv'
+DATA_FILE = "saved_items.csv"
 
 def init_csv():
     if not os.path.exists(CSV_FILE):
@@ -22,15 +21,22 @@ def init_csv():
             writer.writerow(["item", "date_added", "days_left"])
 init_csv()
 
+# Load ML model and preprocessor
+model = None
+preprocessor = None
 
-
-# Build safe absolute path to the model
-model_path = os.path.join("trained_model", "model.pkl")
-
+def load_model():
+    global model, preprocessor
+    if model is None or preprocessor is None:
+        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+        model = joblib.load(os.path.join(BASE_DIR, "trained_model", "train_model_betterversion.pkl"))
+        preprocessor = joblib.load(os.path.join(BASE_DIR, "trained_model", "preprocessor.pkl"))
+# -----------------
 # Routes
+# -----------------
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return render_template('index.html')  # Prediction homepage
 
 @app.route('/content')
 def content():
@@ -40,13 +46,24 @@ def content():
 def fridge():
     return render_template('fridge.html')
 
+@app.route('/shopping')
+def shopping():
+    return render_template('shopping.html')
 
+@app.route('/cooking')
+def cooking():
+    return render_template('cooking.html')
+
+# -----------------
+# Fridge Endpoints
+# -----------------
 @app.route("/save_item", methods=["POST"])
 def save_item():
     data = request.get_json()
     item = data["item"]
     days_left = data.get("daysLeft", 7)
     date_added = datetime.now().strftime("%Y-%m-%d")
+
     rows = []
     with open(CSV_FILE, "r") as f:
         reader = csv.reader(f)
@@ -55,12 +72,11 @@ def save_item():
     with open(CSV_FILE, "w", newline="") as f:
         writer = csv.writer(f)
         for row in rows:
-            if row and row[0] != item:  # keep other items
+            if row and row[0] != item:
                 writer.writerow(row)
-        writer.writerow([item, date_added, days_left])  # save new item
+        writer.writerow([item, date_added, days_left])
 
     return jsonify({"status": "saved"})
-
 
 @app.route("/remove_item", methods=["POST"])
 def remove_item():
@@ -79,13 +95,11 @@ def remove_item():
                 writer.writerow(row)
 
     return jsonify({"status": "removed"})
-    
+
 @app.route("/fridge_data")
 def fridge_data():
     try:
         df = pd.read_csv(CSV_FILE)
-
-        # Auto-update days_left based on date_added
         today = datetime.now().date()
         updated_rows = []
         items = {}
@@ -96,20 +110,18 @@ def fridge_data():
             days_passed = (today - date_added).days
             days_left = max(int(row["days_left"]) - days_passed, 0)
 
-            items[item] = {
-                "exists": days_left > 0,
-                "daysLeft": days_left
-            }
+            items[item] = {"exists": days_left > 0, "daysLeft": days_left}
             updated_rows.append([item, row["date_added"], days_left])
 
-        # Save back updated days_left to CSV
         pd.DataFrame(updated_rows, columns=["item", "date_added", "days_left"]).to_csv(CSV_FILE, index=False)
 
         return jsonify(items)
     except FileNotFoundError:
         return jsonify({})
 
-
+# -----------------
+# Prediction Endpoint
+# -----------------
 @app.route('/predict', methods=['GET', 'POST'])
 def predict():
     prediction = None
@@ -120,33 +132,78 @@ def predict():
         prediction = f"{item} stored in {storage} lasts 5 days"
     return render_template('predict.html', prediction=prediction)
 
-@app.route('/shopping', methods=['GET', 'POST'])
-def shopping():
-    return render_template('shopping.html')
 
-@app.route('/cooking', methods=['GET', 'POST'])
-def cooking():
-    return render_template('cooking.html')
+# -----------------
+# cooking generator 
+# -----------------
+import json
+import requests
 
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+
+@app.route("/generate_recipes", methods=["POST"])
+def generate_recipes():
+    try:
+        payload = request.get_json(force=True) or {}
+        ingredients = payload.get("ingredients", [])
+        if not isinstance(ingredients, list):
+            return jsonify({"error": "ingredients must be a list"}), 400
+        ingredients = [i.strip() for i in ingredients if i.strip()]
+        if not ingredients:
+            return jsonify({"error": "No ingredients provided"}), 400
+
+        # Ask the model to return STRICT JSON we can parse
+        system = (
+            "You are a helpful cooking assistant. "
+            "Return EXACT JSON only, no extra text, with this schema:\n"
+            '{ "recipes": [ { "title": str, "description": str, "steps": [str] } ] }'
+        )
+        user = (
+            f"I have these ingredients: {', '.join(ingredients)}.\n"
+            "Suggest 3 quick, simple recipes I can cook. "
+            "Each recipe: a short description and up to 6 steps."
+        )
+
+        resp = requests.post(
+            "https://api.openai.com/v1/chat/completions",
+            headers={
+                "Authorization": f"Bearer {OPENAI_API_KEY}",
+                "Content-Type": "application/json",
+            },
+            json={
+                "model": "gpt-4o-mini",
+                "messages": [
+                    {"role": "system", "content": system},
+                    {"role": "user", "content": user},
+                ],
+                "temperature": 0.7,
+                "max_tokens": 700,
+            },
+            timeout=30,
+        )
+
+        # If OpenAI returns an error (401, 429, etc.), forward it so you can see it:
+        if resp.status_code != 200:
+            return jsonify({"error": resp.text}), resp.status_code
+
+        data = resp.json()
+        content = data["choices"][0]["message"]["content"]
+
+        # Try to parse the model output as JSON
+        try:
+            obj = json.loads(content)
+            # Validate minimal shape
+            if not isinstance(obj, dict) or "recipes" not in obj:
+                raise ValueError("Missing 'recipes' key")
+            return jsonify(obj)
+        except Exception:
+            # Fallback: return raw text so the UI can still show something
+            return jsonify({"recipes_text": content})
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+# -----------------
+# Run App
+# -----------------
 if __name__ == '__main__':
     app.run(debug=True)
-
-DATA_FILE = "saved_items.csv"
-
-# Utility: Save item
-def save_item(item, storage):
-    file_exists = os.path.isfile(DATA_FILE)
-    with open(DATA_FILE, "a", newline="") as f:
-        writer = csv.writer(f)
-        if not file_exists:  # add header if file doesn’t exist
-            writer.writerow(["item", "storage"])
-        writer.writerow([item, storage])
-
-# Utility: Load items
-def load_items():
-    items = []
-    if os.path.isfile(DATA_FILE):
-        with open(DATA_FILE, "r") as f:
-            reader = csv.DictReader(f)
-            items = list(reader)
-    return items
