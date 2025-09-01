@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Predictions</title>
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      background: #fff4b6; /* pale yellow background */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .header {
+      background: #d94f4f; /* red header */
+      color: white;
+      padding: 20px 60px;
+      border-radius: 50px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 36px;
+    }
+
+    .header p {
+      font-size: 14px;
+      margin: 5px 0 0;
+    }
+
+    .box {
+      background: transparent;
+      padding: 20px;
+      text-align: center;
+      width: 500px;
+      position: relative;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    select, input {
+      flex: 1;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      font-size: 16px;
+      background: #a5ad7e; /* olive green */
+      color: white;
+    }
+
+    input::placeholder {
+      color: #eee;
+    }
+
+    .blue-box {
+      background: #4f6fad; /* big blue box */
+      height: 70px;
+      border-radius: 12px;
+      margin-top: 10px;
+
+      /* Center text inside */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .predict-btn {
+      margin-top: 15px;
+      padding: 12px;
+      background: #2e7d32;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .predict-btn:hover {
+      background: #1b5e20;
+    }
+.frog {
+  position: fixed;   /* stays in place even when scrolling */
+  bottom: 0;         /* stick to the ground */
+  left: 0;           /* stick to the far left */
+  width: 300px;
+  margin: 0;         /* remove any extra spacing */
+}
+
+
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Predictions</h1>
+    <p>select the item to checkout when it expires:</p>
+  </div>
+
+  <div class="box">
+    <div class="row">
+      <select id="storage">
+        <option value="Fridge">Fridge</option>
+        <option value="Freezer">Freezer</option>
+        <option value="Room Temp">Room Temp</option>
+      </select>
+
+      <input type="text" id="foodItem" placeholder="Enter food item">
+    </div>
+
+    <!-- Blue box (will hold result text) -->
+    <div class="blue-box" id="result"></div>
+
+    <!-- Predict button -->
+    <button class="predict-btn" onclick="getPrediction()">Predict</button>
+
+    <img src="{{ url_for('static', filename='images/frog.png') }}" alt="frog mascot" class="frog">
+  </div>
+
+  <script>
+    async function getPrediction() {
+      const storage = document.getElementById("storage").value;
+      const food = document.getElementById("foodItem").value;
+
+      if (!food) {
+        document.getElementById("result").innerText = "⚠️ Please enter a food item!";
+        return;
+      }
+
+      try {
+        const response = await fetch("/predict", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ food: food, storage: storage })
+        });
+
+        const data = await response.json();
+
+        // Put prediction text inside the blue box
+        document.getElementById("result").innerText =
+          `🕒 ${food} in ${storage} lasts ~ ${Math.round(data.prediction)} days`;
+      } catch (err) {
+        document.getElementById("result").innerText = "❌ Error fetching prediction.";
+        console.error(err);
+      }
+    }
+  </script>
+</body>
+</html>
