@@ -171,7 +171,7 @@ def predict_page():
 # -----------------
 # Cooking generator
 # -----------------
-GOOGLE_API_KEY = "AIzaSyCbP6Df3mlH-uclTnTQXqZnm7hJK0XNCEY"
+GOOGLE_API_KEY = "*********nn*****"
 API_ENDPOINT = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key={GOOGLE_API_KEY}"
 
 @app.route("/generate_recipes", methods=["POST"])
