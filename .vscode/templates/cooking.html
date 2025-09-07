@@ -6,27 +6,58 @@
   <title>Cooking Bot</title>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #fff3c4; /* light yellow */
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background-color: #fff6d9; /* light yellow */
       margin: 0;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
+      color: #333;
+    }
+
+    /* Top bar */
+    .top-bar {
+      background: #4E7D73;
+      text-align: left;
+      padding: 10px 15px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      display: flex;
+      gap: 10px;
+      box-sizing: border-box;
+    }
+
+    .top-btn {
+      background: #FFF6EF;
+      color: #4E7D73;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    .top-btn:hover {
+      background: #e8e1dc;
     }
 
     .container {
-      background-color: #fff3c4;
+      background-color: #fff6d9;
       text-align: center;
       max-width: 500px;
       width: 100%;
       padding: 20px;
+      margin-top: 60px; /* avoid overlap with top bar */
     }
 
     h1 {
       font-size: 2.2rem;
       font-weight: bold;
-      color: #2d4823; /* dark green */
+      color: #2d4823;
       margin-bottom: 10px;
     }
 
@@ -39,9 +70,9 @@
     input[type="text"] {
       width: 90%;
       padding: 12px;
-      background-color: #b3c19c; /* greenish box */
+      background-color: #b3c19c;
       border: none;
-      border-radius: 4px;
+      border-radius: 6px;
       font-size: 1rem;
       text-align: center;
       outline: none;
@@ -49,7 +80,7 @@
     }
 
     button {
-      background-color: #e94c3d; /* red button */
+      background-color: #e94c3d;
       color: white;
       border: none;
       border-radius: 15px;
@@ -58,6 +89,7 @@
       font-weight: bold;
       cursor: pointer;
       margin-bottom: 20px;
+      transition: background 0.2s ease;
     }
 
     button:hover {
@@ -65,7 +97,7 @@
     }
 
     .recipes {
-      background-color: #5c7893; /* blue box */
+      background-color: #5c7893;
       border-radius: 12px;
       padding: 20px;
       color: white;
@@ -74,14 +106,12 @@
       margin: 0 auto;
       white-space: pre-wrap;
       text-align: left;
-      
-      /* NEW: fixed height + scrollable content */
       height: 200px;
       overflow-y: auto;
       box-sizing: border-box;
     }
 
-    /* Optional: make scrollbar look nicer */
+    /* Scrollbar style */
     .recipes::-webkit-scrollbar {
       width: 8px;
     }
@@ -92,6 +122,13 @@
   </style>
 </head>
 <body>
+
+  <!-- Top bar with Back + Home buttons -->
+  <div class="top-bar">
+    <button class="top-btn" onclick="window.history.back()">⬅ Back</button>
+    <button class="top-btn" onclick="window.location.href='/'">🏠 Home</button>
+  </div>
+
   <div class="container">
     <h1>Cooking Bot</h1>
     <p class="subtitle">Select ingredients and let AI cooking assistant suggest a dish.</p>
@@ -152,5 +189,6 @@ async function generateRecipes() {
   }
 }
   </script>
+
 </body>
 </html>

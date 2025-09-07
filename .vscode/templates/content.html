@@ -3,10 +3,60 @@
 <head>
     <title>Content</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #fff6d9; /* soft light yellow */
+            margin: 0;
+            color: #333;
+            text-align: center;
+        }
+
+        /* Home button bar */
+        .top-bar {
+            background: #4E7D73;
+            text-align: left;
+            padding: 10px 15px;
+        }
+
+        .home-btn {
+            background: #FFF6EF;
+            color: #4E7D73;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .home-btn:hover {
+            background: #e8e1dc;
+        }
+
+        h1.main-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2f2f2f;
+        }
+
+        p.subtitle {
+            font-size: 1rem;
+            color: #4a4a4a;
+        }
+    </style>
 </head>
 <body>
-<h1 class="main-title">Content</h1>
+
+    <!-- Home Button -->
+    <div class="top-bar">
+        <button class="home-btn" onclick="window.location.href='/'">🏠 Home</button>
+    </div>
+
+    <h1 class="main-title">Content</h1>
     <p class="subtitle">Everything you need to manage your fridge, track expiry dates and shop smarter with AI Assistant</p>
+
     <div class="scroll-container">
         <div class="box" onclick="window.location.href='/fridge'">
             <div class="text">
@@ -40,5 +90,6 @@
             <img src="{{ url_for('static', filename='images/cooking2.png') }}" alt="Cooking Bot">
         </div>
     </div>
+
 </body>
 </html>

@@ -1,78 +1,161 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Fridge Items</title>
- <style>
-  body { 
-    font-family: Arial, sans-serif; 
-    background: #fff4b6; /* your theme bg */
-    padding: 20px; 
-    color: #333; 
-  }
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: #fff4b6;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
 
-  h2 { margin-bottom: 10px; }
+    /* ---------- Top Navigation ---------- */
+    .top-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #4E7D73;
+      color: #FFF6EF;
+      padding: 10px 15px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
 
-  .search-container { margin-bottom: 15px; }
-  #searchBar {
-    padding: 8px; width: 250px;
-    border-radius: 6px; border: 1px solid #ccc;
-  }
+    .nav-buttons {
+      display: flex;
+      gap: 10px;
+    }
 
-  button {
-    padding: 8px 12px; border: none;
-    background: #4E7D73; /* your theme green */
-    color: #FFF6EF; /* matches neutral tone */
-    border-radius: 6px; cursor: pointer;
-    font-weight: bold;
-    transition: background 0.3s;
-  }
-  button:hover {
-    background: #3b5d56; /* darker shade of your green */
-  }
+    .nav-btn {
+      background: #FFF6EF;
+      color: #4E7D73;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .nav-btn:hover {
+      background: #e8e1dc;
+    }
 
-  .grid-container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-auto-rows: 150px;
-    gap: 10px;
-    max-height: 600px;
-    overflow-y: auto;
-    padding: 10px;
-    border: 2px solid #ccc;
-    border-radius: 10px;
-    background: #8C9A6D; /* your theme olive */
-  }
+    h2 {
+      margin: 15px 0;
+      font-size: 1.8rem;
+      color: #2e2e2e;
+      text-align: center;
+    }
 
-  .small-box {
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    background: #FFF6EF; 
-    border-radius: 12px;
-    padding: 10px; cursor: pointer;
-    transition: 0.3s; 
-    border: 2px solid #ddd;
-    color: #333; /* ensures readability */
-  }
-  .small-box img { width: 50px; height: 50px; margin-bottom: 5px; }
-  .small-box:hover { transform: scale(1.05); }
+    /* ---------- Search Section ---------- */
+    .search-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
 
-  /* Status colors */
-  .small-box.default { background: #FFF6EF; color: #333; }
-  .small-box.exists { background: #4E7D73; color:#FFF6EF; }
-  .small-box.expiring { background: #e65c4f; color:#FFF6EF; }
-</style>
+    #searchBar {
+      padding: 10px;
+      width: 260px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      transition: 0.2s;
+    }
+    #searchBar:focus {
+      outline: none;
+      border-color: #4E7D73;
+      box-shadow: 0 0 5px rgba(78,125,115,0.4);
+    }
 
+    button {
+      padding: 10px 16px;
+      border: none;
+      background: #4E7D73;
+      color: #FFF6EF;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+    button:hover {
+      background: #3b5d56;
+      transform: translateY(-2px);
+    }
 
+    /* ---------- Grid Layout ---------- */
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      max-height: 600px;
+      overflow-y: auto;
+      margin: 0 15px 20px;
+      padding: 15px;
+      border: 2px solid #ccc;
+      border-radius: 12px;
+      background: #8C9A6D;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    /* ---------- Item Boxes ---------- */
+    .small-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #FFF6EF;
+      border-radius: 12px;
+      padding: 12px;
+      cursor: pointer;
+      transition: 0.3s ease;
+      border: 2px solid #ddd;
+      text-align: center;
+    }
+    .small-box img {
+      width: 50px;
+      height: 50px;
+      margin-bottom: 5px;
+    }
+    .small-box:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    /* ---------- Status Colors ---------- */
+    .small-box.default { background: #FFF6EF; color: #333; }
+    .small-box.exists { background: #4E7D73; color: #FFF6EF; }
+    .small-box.expiring { background: #e65c4f; color: #FFF6EF; }
+  </style>
 </head>
 <body>
-  <h2>Select Items For Your Fridge:</h2>
+
+  <!-- Top Navigation -->
+  <div class="top-nav">
+    <div class="nav-buttons">
+      <button class="nav-btn" onclick="history.back()">← Back</button>
+      <button class="nav-btn" onclick="window.location.href='/'">🏠 Home</button>
+    </div>
+    <div style="width: 20px;"></div> <!-- Empty space for alignment -->
+  </div>
+
+  <h2>Select Items For Your Fridge</h2>
 
   <!-- Search bar -->
   <div class="search-container">
     <input type="text" id="searchBar" placeholder="Search or add item...">
     <button onclick="addManualItem()">Add</button>
   </div>
+
 
   <!-- Items Grid -->
   <div class="grid-container" id="itemsGrid">
@@ -111,102 +194,76 @@
   <div class="small-box" data-name="tomato paste"><img src="{{ url_for('static', filename='images/tomato_paste.png') }}"><p>tomato paste</p></div>
 </div>
 
+ <script>
+    let fridgeDataset = {};
 
-  <script>
-  let fridgeDataset = {};
+    fetch("/fridge_data")
+      .then(res => res.json())
+      .then(data => {
+        fridgeDataset = data;
+        updateBoxes();
+      });
 
-fetch("/fridge_data")
-  .then(res => res.json())
-  .then(data => {
-    fridgeDataset = data;
-    updateBoxes();
-  });
+    function updateBoxes() {
+      document.querySelectorAll(".small-box").forEach(box => {
+        let name = box.dataset.name;
+        box.classList.remove("default", "exists", "expiring");
 
-  function updateBoxes() {
-  document.querySelectorAll(".small-box").forEach(box => {
-    let name = box.dataset.name;
-    box.classList.remove("default", "exists", "expiring");
-
-    if (fridgeDataset[name]) {
-      if (fridgeDataset[name].daysLeft <= 3) {
-        box.classList.add("expiring"); // red
-      } else {
-        box.classList.add("exists"); // green
-      }
-    } else {
-      box.classList.add("default"); // grey
+        if (fridgeDataset[name]) {
+          if (fridgeDataset[name].daysLeft <= 3) {
+            box.classList.add("expiring");
+          } else {
+            box.classList.add("exists");
+          }
+        } else {
+          box.classList.add("default");
+        }
+      });
     }
-  });
-}
 
-    // Apply dataset colors
     document.querySelectorAll(".small-box").forEach(box => {
       let name = box.dataset.name;
-      if (fridgeDataset[name]) {
-        if (fridgeDataset[name].daysLeft <= 3) {
-          box.classList.add("expiring");
-        } else {
-          box.classList.add("exists");
-        }
-      } else {
-        box.classList.add("default");
-      }
 
-      // Single click → mark exists
       box.addEventListener("click", () => {
-       fridgeDataset[name] = { exists: true, daysLeft: 7 };
-  updateBoxes();
-
-  // Save to backend with current date
-  fetch("/save_item", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ item: name, daysLeft: 7 })
-  });
-});
-
-
-      // Double click → reset to default
-      box.addEventListener("dblclick", () => {
-        delete fridgeDataset[name]; // remove from dataset
-        box.classList.remove("exists", "expiring");
-        box.classList.add("default");
-
+        fridgeDataset[name] = { exists: true, daysLeft: 7 };
         updateBoxes();
-
-  fetch("/remove_item", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ item: name })
-  });
-});
+        fetch("/save_item", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ item: name, daysLeft: 7 })
+        });
       });
-   
 
-    // Search filter
+      box.addEventListener("dblclick", () => {
+        delete fridgeDataset[name];
+        updateBoxes();
+        fetch("/remove_item", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ item: name })
+        });
+      });
+    });
+
     document.getElementById("searchBar").addEventListener("keyup", function() {
       let filter = this.value.toLowerCase();
-      let boxes = document.querySelectorAll(".small-box");
-      boxes.forEach(box => {
+      document.querySelectorAll(".small-box").forEach(box => {
         let name = box.dataset.name.toLowerCase();
         box.style.display = name.includes(filter) ? "flex" : "none";
       });
     });
 
-    // Add new item manually
     function addManualItem() {
       let input = document.getElementById("searchBar");
       let newItem = input.value.trim();
       if (!newItem) return;
 
       let grid = document.getElementById("itemsGrid");
-
-      // Create new box
       let div = document.createElement("div");
       div.className = "small-box default";
       div.dataset.name = newItem.toLowerCase();
       div.innerHTML = `<img src="images/default.png" alt="${newItem}">
-                      <p>${newItem}</p>`;
+                       <p>${newItem}</p>`;
 
       div.addEventListener("click", () => {
         fridgeDataset[newItem.toLowerCase()] = { exists: true, daysLeft: 7 };
@@ -223,13 +280,6 @@ fetch("/fridge_data")
       grid.appendChild(div);
       input.value = "";
     }
-
-    fetch("/save", {
-  method: "POST",
-  headers: {"Content-Type": "application/json"},
-  body: JSON.stringify(dataset)
-});
-
   </script>
 </body>
 </html>

@@ -6,43 +6,91 @@
 <title>Shopping List</title>
 <style>
   body {
-    font-family: Arial, sans-serif;
-    background: #fff4b6;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #fff6d9; /* soft light yellow */
+    margin: 0;
     padding: 20px;
     color: #333;
   }
-  h1 {
-    font-size: 48px;
-    text-align: center;
-    color: #2e4f2e;
+
+  /* Top bar with home button */
+  .top-bar {
+    background: #4E7D73;
+    text-align: left;
+    padding: 10px 15px;
+    margin: -20px -20px 20px -20px; /* stretch full width */
   }
+  .home-btn {
+    background: #FFF6EF;
+    color: #4E7D73;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+  .home-btn:hover {
+    background: #e8e1dc;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    text-align: center;
+    color: #2f2f2f;
+    margin-bottom: 0;
+  }
+
   p {
     text-align: center;
-    color: #2e4f2e;
+    color: #4a4a4a;
+    margin-top: 5px;
   }
+
   .input-container {
     text-align: center;
     margin: 20px 0;
   }
+
   input[type="text"] {
     padding: 10px;
     font-size: 16px;
     width: 200px;
-    border-radius: 5px;
+    border-radius: 8px;
     border: 1px solid #ccc;
+    outline: none;
   }
+
+  button {
+    background: #4E7D73;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-left: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+
+  button:hover {
+    background: #3a5d55;
+  }
+
   .shopping-container {
     display: flex;
-    flex-direction: column; /* vertical stacking */
+    flex-direction: column;
     padding: 20px;
     gap: 10px;
     background: #de935f;
     border-radius: 20px;
-    align-items: center; /* center horizontally */
+    align-items: center;
   }
+
   .item-box {
     background: #607d8b;
-    width: 300px; /* long horizontally */
+    width: 300px;
     height: 80px;
     border-radius: 10px;
     display: flex;
@@ -54,10 +102,13 @@
     cursor: pointer;
     text-align: center;
     padding: 0 10px;
+    transition: background 0.3s ease;
   }
+
   .item-box.checked {
     display: none;
   }
+
   .item-box input[type="checkbox"] {
     position: absolute;
     top: 10px;
@@ -66,6 +117,7 @@
     height: 20px;
     cursor: pointer;
   }
+
   .item-text {
     width: 100%;
     text-align: center;
@@ -74,6 +126,13 @@
 </style>
 </head>
 <body>
+
+<!-- Home Button Bar -->
+<div class="top-bar">
+  <button class="nav-btn" onclick="history.back()">← Back</button>
+
+  <button class="home-btn" onclick="window.location.href='/'">🏠 Home</button>
+</div>
 
 <h1>Shopping List</h1>
 <p>Adding the items you are missing:</p>
