@@ -1,58 +1,156 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cooking Bot</title>
-<style>
-body { font-family: Arial; background: #f8f9fa; display:flex; justify-content:center; align-items:flex-start; min-height:100vh; margin:0; padding:0;}
-.container { width: 600px; margin-top:50px; background:#fff; padding:25px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.1);}
-h1 { text-align:center; margin-bottom:20px; color:#333;}
-input[type="text"] { width:100%; padding:12px; margin-bottom:15px; border-radius:8px; border:1px solid #ccc;}
-button { width:100%; padding:12px; background:#28a745; color:white; border:none; border-radius:8px; cursor:pointer; font-size:16px;}
-button:hover { background:#218838; }
-.recipes { margin-top:20px; padding:15px; background:#f1f1f1; border-radius:8px; min-height:100px; white-space:pre-wrap;}
-.loading { color:#555; font-style:italic;}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cooking Bot</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #fff3c4; /* light yellow */
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background-color: #fff3c4;
+      text-align: center;
+      max-width: 500px;
+      width: 100%;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      font-weight: bold;
+      color: #2d4823; /* dark green */
+      margin-bottom: 10px;
+    }
+
+    p.subtitle {
+      font-size: 1rem;
+      color: #444;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+      width: 90%;
+      padding: 12px;
+      background-color: #b3c19c; /* greenish box */
+      border: none;
+      border-radius: 4px;
+      font-size: 1rem;
+      text-align: center;
+      outline: none;
+      margin-bottom: 15px;
+    }
+
+    button {
+      background-color: #e94c3d; /* red button */
+      color: white;
+      border: none;
+      border-radius: 15px;
+      padding: 15px 30px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+
+    button:hover {
+      background-color: #d83e30;
+    }
+
+    .recipes {
+      background-color: #5c7893; /* blue box */
+      border-radius: 12px;
+      padding: 20px;
+      color: white;
+      font-size: 1rem;
+      max-width: 90%;
+      margin: 0 auto;
+      white-space: pre-wrap;
+      text-align: left;
+      
+      /* NEW: fixed height + scrollable content */
+      height: 200px;
+      overflow-y: auto;
+      box-sizing: border-box;
+    }
+
+    /* Optional: make scrollbar look nicer */
+    .recipes::-webkit-scrollbar {
+      width: 8px;
+    }
+    .recipes::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.6);
+      border-radius: 10px;
+    }
+  </style>
 </head>
 <body>
-<div class="container">
-<h1>🍳 Cooking Bot</h1>
-<input type="text" id="ingredients" placeholder="Enter ingredients, comma-separated">
-<button onclick="generateRecipes()">Generate Recipes</button>
-<div class="recipes" id="recipes">Recipes will appear here...</div>
-</div>
+  <div class="container">
+    <h1>Cooking Bot</h1>
+    <p class="subtitle">Select ingredients and let AI cooking assistant suggest a dish.</p>
 
-<script>
+    <input type="text" id="ingredients" placeholder="Type your ingredients here...">
+
+    <br>
+    <button onclick="generateRecipes()">FIND RECIPES</button>
+
+    <div class="recipes" id="recipes">
+      Recipes will appear here...
+    </div>
+  </div>
+
+  <script>
 async function generateRecipes() {
-    const input = document.getElementById("ingredients").value.trim();
-    const recipesDiv = document.getElementById("recipes");
+  const input = document.getElementById("ingredients").value.trim();
+  const recipesDiv = document.getElementById("recipes");
 
-    if (!input) { alert("Please enter at least one ingredient."); return; }
+  if (!input) {
+    alert("Please enter at least one ingredient.");
+    return;
+  }
 
-    const ingredients = input.split(",").map(s => s.trim()).filter(Boolean);
-    recipesDiv.innerHTML = "<p class='loading'>🍲 Generating recipes...</p>";
+  const ingredients = input.split(",").map(s => s.trim()).filter(Boolean);
+  recipesDiv.innerHTML = "🍲 Generating recipes...";
 
-    try {
-        const res = await fetch("/generate_recipes", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ ingredients })
-        });
+  try {
+    const res = await fetch("/generate_recipes", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ingredients })
+    });
+    const data = await res.json();
 
-        const data = await res.json();
-
-        if (data.error) {
-            recipesDiv.innerHTML = `<p style="color:red;">Error: ${data.error}</p>`;
-            return;
-        }
-
-        recipesDiv.textContent = data.recipes_text || "No recipes found.";
-    } catch (err) {
-        recipesDiv.innerHTML = `<p style="color:red;">Request failed: ${err.message}</p>`;
-        console.error(err);
+    if (data.error) {
+      recipesDiv.innerHTML = `❌ Error: ${data.error}`;
+      return;
     }
+
+    if (data.recipes && Array.isArray(data.recipes)) {
+      recipesDiv.innerHTML = data.recipes.map(r => `
+        🍽️ <strong>${r.title || "Untitled recipe"}</strong>\n
+        ${r.description || ""}\n
+        ${Array.isArray(r.steps) ? r.steps.map((s, i) => `${i + 1}. ${s}`).join("\n") : ""}
+      `).join("\n\n");
+      return;
+    }
+
+    if (data.recipes_text) {
+      recipesDiv.textContent = data.recipes_text;
+      return;
+    }
+
+    recipesDiv.textContent = "No recipes found.";
+  } catch (err) {
+    recipesDiv.innerHTML = `❌ Request failed: ${err.message}`;
+  }
 }
-</script>
+  </script>
 </body>
 </html>
