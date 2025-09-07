@@ -1,147 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Predictions</title>
-  <style>
-    body {
-      font-family: "Poppins", sans-serif;
-      background: #fff4b6; /* pale yellow background */
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      flex-direction: column;
-      position: relative;
-    }
-
-    .header {
-      background: #d94f4f; /* red header */
-      color: white;
-      padding: 20px 60px;
-      border-radius: 50px;
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .header h1 {
-      margin: 0;
-      font-size: 36px;
-    }
-
-    .header p {
-      font-size: 14px;
-      margin: 5px 0 0;
-    }
-
-    .box {
-      background: transparent;
-      padding: 20px;
-      text-align: center;
-      width: 500px;
-      position: relative;
-    }
-
-    .row {
-      display: flex;
-      justify-content: space-between;
-      gap: 15px;
-      margin-bottom: 20px;
-    }
-
-    select, input {
-      flex: 1;
-      padding: 12px;
-      border-radius: 8px;
-      border: none;
-      font-size: 16px;
-      background: #a5ad7e; /* olive green */
-      color: white;
-    }
-
-    input::placeholder {
-      color: #eee;
-    }
-
-    .blue-box {
-      background: #4f6fad; /* big blue box */
-      height: 70px;
-      border-radius: 12px;
-      margin-top: 10px;
-
-      /* Center text inside */
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: white;
-      font-size: 18px;
-      font-weight: bold;
-    }
-
-    .predict-btn {
-      margin-top: 15px;
-      padding: 12px;
-      background: #2e7d32;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    .predict-btn:hover {
-      background: #1b5e20;
-    }
-.frog {
-  position: fixed;   /* stays in place even when scrolling */
-  bottom: 0;         /* stick to the ground */
-  left: 0;           /* stick to the far left */
-  width: 300px;
-  margin: 0;         /* remove any extra spacing */
-}
-
-
-  </style>
-<html>
-<head>
-    <title>Food Prediction</title>
+    <meta charset="UTF-8">
+    <title>Food Shelf Life Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            padding: 25px 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            width: 400px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        label {
+            display: block;
+            margin: 15px 0 5px;
+        }
+        input[type="text"], select {
+            width: 100%;
+            padding: 8px 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            margin-top: 20px;
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            background-color: #e7f3fe;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .error {
+            color: red;
+            margin-top: 10px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-    <h2>Food Storage Prediction</h2>
+    <div class="container">
+        <h1>Predict Food Shelf Life</h1>
+        <form id="predictForm">
+            <label for="food">Food Item:</label>
+            <input type="text" id="food" name="food" placeholder="Type your food item" required>
 
-    <label>Food:</label>
-    <select id="food">
-        {% for food in foods %}
-            <option value="{{ food }}">{{ food }}</option>
-        {% endfor %}
-    </select>
+            <label for="storage">Storage Method:</label>
+            <select id="storage" name="storage" required>
+                {% for method in storage_methods %}
+                <option value="{{ method }}">{{ method }}</option>
+                {% endfor %}
+            </select>
 
-    <label>Storage:</label>
-    <select id="storage">
-        {% for storage in storages %}
-            <option value="{{ storage }}">{{ storage }}</option>
-        {% endfor %}
-    </select>
+            <button type="submit">Predict</button>
+        </form>
 
-    <button onclick="sendPrediction()">Predict</button>
-    <p id="result"></p>
+        <div class="result" id="result" style="display:none;"></div>
+        <div class="error" id="error" style="display:none;"></div>
+    </div>
 
     <script>
-        function sendPrediction() {
-            const food = document.getElementById('food').value;
+        const form = document.getElementById('predictForm');
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const food = document.getElementById('food').value.trim();
             const storage = document.getElementById('storage').value;
 
-            fetch('/predict', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({food: food, storage: storage})
-            })
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('result').innerText = "Prediction: " + data.prediction;
-            });
-        }
+            document.getElementById('result').style.display = 'none';
+            document.getElementById('error').style.display = 'none';
+
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ food, storage })
+                });
+                const data = await response.json();
+
+                if (response.ok) {
+                    document.getElementById('result').innerText = 
+                        `Predicted shelf life for ${data.food} (stored in ${data.storage}): ${data.prediction} days`;
+                    document.getElementById('result').style.display = 'block';
+                } else {
+                    document.getElementById('error').innerText = data.error || 'Something went wrong';
+                    document.getElementById('error').style.display = 'block';
+                }
+            } catch (err) {
+                document.getElementById('error').innerText = 'Error connecting to server';
+                document.getElementById('error').style.display = 'block';
+            }
+        });
     </script>
 </body>
 </html>

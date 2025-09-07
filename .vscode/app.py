@@ -131,36 +131,43 @@ def fridge_data():
 # -----------------
 # Prediction Endpoint
 # -----------------
-@app.route('/predict', methods=['POST'])
-def predict():
-    load_model()
-    try:
-        data = request.get_json(force=True)
-        food_item = data.get("food", "").strip()
-        storage = data.get("storage", "").strip()
+# -----------------
+# Prediction Endpoint (POST only)
+# -----------------
+@app.route('/predict', methods=['GET', 'POST'])
+def predict_page():
+    load_model()  # make sure model is loaded
 
-        if not food_item or not storage:
-            return jsonify({"error": "Missing food item or storage method"}), 400
+    if request.method == 'POST':
+        try:
+            data = request.get_json(force=True)
+            food_item = data.get("food", "").strip()
+            storage = data.get("storage", "").strip()
 
-        # Check if food item exists
-        if food_item.lower() not in items_df["Food Item"].str.lower().values:
-            return jsonify({"error": f"Item '{food_item}' not found in dataset"}), 404
+            # Validate inputs
+            if not food_item or not storage:
+                return jsonify({"error": "Missing food item or storage method"}), 400
 
-        X_input = pd.DataFrame([[food_item, storage]], columns=["Food Item", "Storage"])
-        X_transformed = preprocessor.transform(X_input)
-        prediction = model.predict(X_transformed)[0]
+            # Check if food item exists in items.csv
+            if food_item.lower() not in items_df["Food Item"].str.lower().values:
+                return jsonify({"error": f"Item '{food_item}' not found in dataset"}), 404
 
-        return jsonify({"food": food_item, "storage": storage, "prediction": float(prediction)})
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+            # Prepare dataframe for model
+            X_input = pd.DataFrame([[food_item, storage]], columns=["Food Item", "Storage"])
+            X_transformed = preprocessor.transform(X_input)
+            prediction = model.predict(X_transformed)[0]
 
-@app.route('/predict', methods=['GET'])
-def get_info():
-    return jsonify({
-        'message': "Send POST with 'food' and 'storage' to get prediction",
-        'available_items': items_df['Food Item'].tolist()
-    })
+            return jsonify({
+                "food": food_item,
+                "storage": storage,
+                "prediction": float(prediction)
+            })
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
 
+    # GET request: render the prediction page
+    storage_methods = ["Refrigerator", "Freezer", "Pantry"]  # dropdown for storage only
+    return render_template('predict.html', storage_methods=storage_methods)
 # -----------------
 # Cooking generator
 # -----------------
