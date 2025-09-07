@@ -103,60 +103,45 @@
 
 
   </style>
+<html>
+<head>
+    <title>Food Prediction</title>
 </head>
 <body>
-  <div class="header">
-    <h1>Predictions</h1>
-    <p>select the item to checkout when it expires:</p>
-  </div>
+    <h2>Food Storage Prediction</h2>
 
-  <div class="box">
-    <div class="row">
-      <select id="storage">
-        <option value="Fridge">Fridge</option>
-        <option value="Freezer">Freezer</option>
-        <option value="Room Temp">Room Temp</option>
-      </select>
+    <label>Food:</label>
+    <select id="food">
+        {% for food in foods %}
+            <option value="{{ food }}">{{ food }}</option>
+        {% endfor %}
+    </select>
 
-      <input type="text" id="foodItem" placeholder="Enter food item">
-    </div>
+    <label>Storage:</label>
+    <select id="storage">
+        {% for storage in storages %}
+            <option value="{{ storage }}">{{ storage }}</option>
+        {% endfor %}
+    </select>
 
-    <!-- Blue box (will hold result text) -->
-    <div class="blue-box" id="result"></div>
+    <button onclick="sendPrediction()">Predict</button>
+    <p id="result"></p>
 
-    <!-- Predict button -->
-    <button class="predict-btn" onclick="getPrediction()">Predict</button>
+    <script>
+        function sendPrediction() {
+            const food = document.getElementById('food').value;
+            const storage = document.getElementById('storage').value;
 
-    <img src="{{ url_for('static', filename='images/frog.png') }}" alt="frog mascot" class="frog">
-  </div>
-
-  <script>
-    async function getPrediction() {
-      const storage = document.getElementById("storage").value;
-      const food = document.getElementById("foodItem").value;
-
-      if (!food) {
-        document.getElementById("result").innerText = "⚠️ Please enter a food item!";
-        return;
-      }
-
-      try {
-        const response = await fetch("/predict", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ food: food, storage: storage })
-        });
-
-        const data = await response.json();
-
-        // Put prediction text inside the blue box
-        document.getElementById("result").innerText =
-          `🕒 ${food} in ${storage} lasts ~ ${Math.round(data.prediction)} days`;
-      } catch (err) {
-        document.getElementById("result").innerText = "❌ Error fetching prediction.";
-        console.error(err);
-      }
-    }
-  </script>
+            fetch('/predict', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({food: food, storage: storage})
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').innerText = "Prediction: " + data.prediction;
+            });
+        }
+    </script>
 </body>
 </html>
