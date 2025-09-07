@@ -171,58 +171,55 @@ def predict_page():
 # -----------------
 # Cooking generator
 # -----------------
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+GOOGLE_API_KEY = "AIzaSyCbP6Df3mlH-uclTnTQXqZnm7hJK0XNCEY"
+API_ENDPOINT = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key={GOOGLE_API_KEY}"
 
 @app.route("/generate_recipes", methods=["POST"])
 def generate_recipes():
     try:
-        payload = request.get_json(force=True) or {}
-        ingredients = payload.get("ingredients", [])
-        if not isinstance(ingredients, list) or not ingredients:
-            return jsonify({"error": "Provide a non-empty list of ingredients"}), 400
+        data = request.get_json()
+        ingredients = data.get("ingredients", [])
+        if not ingredients:
+            return jsonify({"error": "No ingredients provided"}), 400
 
-        system = (
-            "You are a helpful cooking assistant. "
-            "Return EXACT JSON only, no extra text, with this schema:\n"
-            '{ "recipes": [ { "title": str, "description": str, "steps": [str] } ] }'
-        )
-        user = (
-            f"I have these ingredients: {', '.join(ingredients)}.\n"
-            "Suggest 3 quick, simple recipes. Each recipe: description + up to 6 steps."
+        # Build the prompt for the model
+        prompt = (
+            f"You are a helpful cooking assistant. I have these ingredients: {', '.join(ingredients)}.\n"
+            "Suggest 3 quick, simple recipes. Each recipe should have a title, short description, "
+            "and up to 6 numbered steps.\n"
+            "Format like this:\n\n"
+            "Recipe 1: <Title>\nDescription: <text>\nSteps:\n1. ...\n2. ...\n\n"
+            "Recipe 2: ...\n\nRecipe 3: ..."
         )
 
-        resp = requests.post(
-            "https://api.openai.com/v1/chat/completions",
-            headers={
-                "Authorization": f"Bearer {OPENAI_API_KEY}",
-                "Content-Type": "application/json",
-            },
+        # Call Google Gemini API
+        response = requests.post(
+            API_ENDPOINT,
             json={
-                "model": "gpt-4o-mini",
-                "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}],
-                "temperature": 0.7,
-                "max_tokens": 700,
+                "contents": [
+                    {"parts": [{"text": prompt}]}
+                ]
             },
-            timeout=30,
+            timeout=60
         )
 
-        if resp.status_code != 200:
-            return jsonify({"error": resp.text}), resp.status_code
+        if response.status_code != 200:
+            return jsonify({"error": response.text}), response.status_code
 
-        data = resp.json()
-        content = data["choices"][0]["message"]["content"]
+        result = response.json()
 
-        try:
-            obj = json.loads(content)
-            if not isinstance(obj, dict) or "recipes" not in obj:
-                raise ValueError("Missing 'recipes' key")
-            return jsonify(obj)
-        except Exception:
-            return jsonify({"recipes_text": content})
+        # Extract the generated text from the response
+        if 'candidates' in result and len(result['candidates']) > 0:
+            generated_text = result['candidates'][0]['content']['parts'][0]['text']
+        else:
+            generated_text = str(result)
+
+        return jsonify({"recipes_text": generated_text})
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+  
 # -----------------
 # Run App
 # -----------------

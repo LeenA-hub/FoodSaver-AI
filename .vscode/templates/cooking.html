@@ -1,146 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cooking Bot</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f8f9fa;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      min-height: 100vh;
-    }
-
-    .container {
-      width: 600px;
-      margin-top: 50px;
-      background: #fff;
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
-    }
-
-    h1 {
-      text-align: center;
-      margin-bottom: 20px;
-      color: #333;
-    }
-
-    label {
-      font-weight: bold;
-      display: block;
-      margin-bottom: 8px;
-      color: #555;
-    }
-
-    input[type="text"] {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      margin-bottom: 15px;
-      font-size: 14px;
-    }
-
-    button {
-      width: 100%;
-      padding: 12px;
-      background: #28a745;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 16px;
-      transition: background 0.2s;
-    }
-
-    button:hover {
-      background: #218838;
-    }
-
-    .recipes {
-      margin-top: 20px;
-      padding: 15px;
-      background: #f1f1f1;
-      border-radius: 8px;
-      min-height: 100px;
-      white-space: pre-wrap; /* keeps formatting from ChatGPT */
-      font-size: 15px;
-    }
-
-    .loading {
-      color: #555;
-      font-style: italic;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cooking Bot</title>
+<style>
+body { font-family: Arial; background: #f8f9fa; display:flex; justify-content:center; align-items:flex-start; min-height:100vh; margin:0; padding:0;}
+.container { width: 600px; margin-top:50px; background:#fff; padding:25px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.1);}
+h1 { text-align:center; margin-bottom:20px; color:#333;}
+input[type="text"] { width:100%; padding:12px; margin-bottom:15px; border-radius:8px; border:1px solid #ccc;}
+button { width:100%; padding:12px; background:#28a745; color:white; border:none; border-radius:8px; cursor:pointer; font-size:16px;}
+button:hover { background:#218838; }
+.recipes { margin-top:20px; padding:15px; background:#f1f1f1; border-radius:8px; min-height:100px; white-space:pre-wrap;}
+.loading { color:#555; font-style:italic;}
+</style>
 </head>
 <body>
-  <div class="container">
-    <h1>🍳 Cooking Bot</h1>
-    <label for="ingredients">Enter ingredients (comma-separated):</label>
-    <input type="text" id="ingredients" placeholder="e.g. chicken, rice, tomato">
+<div class="container">
+<h1>🍳 Cooking Bot</h1>
+<input type="text" id="ingredients" placeholder="Enter ingredients, comma-separated">
+<button onclick="generateRecipes()">Generate Recipes</button>
+<div class="recipes" id="recipes">Recipes will appear here...</div>
+</div>
 
-    <button onclick="generateRecipes()">Generate Recipes</button>
-
-    <div class="recipes" id="recipes">
-      Recipes will appear here...
-    </div>
-  </div>
-
-  <script>
+<script>
 async function generateRecipes() {
-  const input = document.getElementById("ingredients").value.trim();
-  const recipesDiv = document.getElementById("recipes");
+    const input = document.getElementById("ingredients").value.trim();
+    const recipesDiv = document.getElementById("recipes");
 
-  if (!input) {
-    alert("Please enter at least one ingredient.");
-    return;
-  }
+    if (!input) { alert("Please enter at least one ingredient."); return; }
 
-  const ingredients = input.split(",").map(s => s.trim()).filter(Boolean);
-  recipesDiv.innerHTML = "<p class='loading'>🍲 Generating recipes...</p>";
+    const ingredients = input.split(",").map(s => s.trim()).filter(Boolean);
+    recipesDiv.innerHTML = "<p class='loading'>🍲 Generating recipes...</p>";
 
-  try {
-    const res = await fetch("/generate_recipes", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ingredients })
-    });
-    const data = await res.json();
+    try {
+        const res = await fetch("/generate_recipes", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ ingredients })
+        });
 
-    if (data.error) {
-      recipesDiv.innerHTML = `<p style="color:red;">Error: ${data.error}</p>`;
-      console.error(data.error);
-      return;
+        const data = await res.json();
+
+        if (data.error) {
+            recipesDiv.innerHTML = `<p style="color:red;">Error: ${data.error}</p>`;
+            return;
+        }
+
+        recipesDiv.textContent = data.recipes_text || "No recipes found.";
+    } catch (err) {
+        recipesDiv.innerHTML = `<p style="color:red;">Request failed: ${err.message}</p>`;
+        console.error(err);
     }
-
-    // If backend returned structured JSON
-    if (data.recipes && Array.isArray(data.recipes)) {
-      recipesDiv.innerHTML = data.recipes.map(r => `
-        <div style="margin-bottom:16px; padding:12px; background:#fff; border-radius:8px; border:1px solid #eee;">
-          <h3 style="margin:0 0 6px 0;">${r.title || "Untitled recipe"}</h3>
-          <p style="margin:0 0 8px 0;">${r.description || ""}</p>
-          ${Array.isArray(r.steps) ? `<ol style="padding-left:18px;">${r.steps.map(s => `<li>${s}</li>`).join("")}</ol>` : ""}
-        </div>
-      `).join("");
-      return;
-    }
-
-    // Fallback to raw text (if JSON parsing failed on backend)
-    if (data.recipes_text) {
-      recipesDiv.textContent = data.recipes_text;
-      return;
-    }
-
-    recipesDiv.textContent = "No recipes found (empty response).";
-  } catch (err) {
-    recipesDiv.innerHTML = `<p style="color:red;">Request failed: ${err.message}</p>`;
-    console.error(err);
-  }
 }
 </script>
+</body>
+</html>
