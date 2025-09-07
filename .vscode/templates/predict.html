@@ -1,118 +1,203 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Food Shelf Life Prediction</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .container {
-            background-color: #fff;
-            padding: 25px 40px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            width: 400px;
-        }
-        h1 {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-        label {
-            display: block;
-            margin: 15px 0 5px;
-        }
-        input[type="text"], select {
-            width: 100%;
-            padding: 8px 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-        button {
-            margin-top: 20px;
-            width: 100%;
-            padding: 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        .result {
-            margin-top: 20px;
-            background-color: #e7f3fe;
-            padding: 10px;
-            border-radius: 5px;
-            text-align: center;
-        }
-        .error {
-            color: red;
-            margin-top: 10px;
-            text-align: center;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Food Shelf Life Prediction</title>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background-color: #fff3c4; /* light yellow */
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      text-align: center;
+      max-width: 600px;
+      width: 100%;
+    }
+
+    /* Big red header */
+    .header-box {
+      background-color: #e94c3d;
+      color: white;
+      border-radius: 40px;
+      padding: 20px;
+      margin-bottom: 15px;
+    }
+
+    .header-box h1 {
+      font-size: 2rem;
+      margin: 0;
+    }
+
+    .header-box p {
+      font-size: 0.9rem;
+      margin: 5px 0 0;
+    }
+
+    /* Green select + input row */
+    .form-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin: 15px 0;
+      flex-wrap: wrap;
+    }
+
+    select, input[type="text"] {
+      background-color: #b3c19c;
+      border: none;
+      padding: 10px;
+      border-radius: 4px;
+      font-size: 1rem;
+      min-width: 120px;
+      text-align: center;
+      outline: none;
+    }
+
+    /* Clear button inside input row */
+    .input-wrapper {
+      display: flex;
+      align-items: center;
+      background-color: #b3c19c;
+      border-radius: 4px;
+      padding: 0 8px;
+    }
+
+    .input-wrapper input {
+      border: none;
+      background: none;
+      padding: 8px;
+      flex: 1;
+      text-align: left;
+    }
+
+    .clear-btn {
+      border: none;
+      background: none;
+      font-size: 1rem;
+      cursor: pointer;
+      color: #333;
+    }
+
+    /* Generate Button */
+    .generate-btn {
+      background-color: #e94c3d;
+      color: white;
+      border: none;
+      border-radius: 15px;
+      padding: 12px 30px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      margin: 10px 0 20px;
+      display: inline-block;
+    }
+
+    .generate-btn:hover {
+      background-color: #d83e30;
+    }
+
+    /* Blue results box */
+    .result-box {
+      background-color: #5c7893;
+      border-radius: 12px;
+      color: white;
+      padding: 15px;
+      max-width: 400px;
+      margin: 0 auto;
+      height: 120px;
+      overflow-y: auto;
+      text-align: left;
+    }
+
+    /* Frog */
+    .frog {
+      position: fixed; /* stays in place even when scrolling */
+      bottom: 0;       /* stick to bottom */
+      left: 0;         /* stick to far left */
+      margin: 0;
+    }
+
+    .frog img {
+      width: 300px;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Predict Food Shelf Life</h1>
-        <form id="predictForm">
-            <label for="food">Food Item:</label>
-            <input type="text" id="food" name="food" placeholder="Type your food item" required>
-
-            <label for="storage">Storage Method:</label>
-            <select id="storage" name="storage" required>
-                {% for method in storage_methods %}
-                <option value="{{ method }}">{{ method }}</option>
-                {% endfor %}
-            </select>
-
-            <button type="submit">Predict</button>
-        </form>
-
-        <div class="result" id="result" style="display:none;"></div>
-        <div class="error" id="error" style="display:none;"></div>
+  <div class="container">
+    <!-- Red Header -->
+    <div class="header-box">
+      <h1>Predictions</h1>
+      <p>select the item to checkout when it expires:</p>
     </div>
 
-    <script>
-        const form = document.getElementById('predictForm');
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const food = document.getElementById('food').value.trim();
-            const storage = document.getElementById('storage').value;
+    <!-- Select + Input Row -->
+    <div class="form-row">
+      <select id="storage" name="storage">
+        <option value="">Storage Type</option>
+        {% for method in storage_methods %}
+        <option value="{{ method }}">{{ method }}</option>
+        {% endfor %}
+      </select>
 
-            document.getElementById('result').style.display = 'none';
-            document.getElementById('error').style.display = 'none';
+      <div class="input-wrapper">
+        <input type="text" id="food" name="food" placeholder="Enter item">
+        <button class="clear-btn" onclick="document.getElementById('food').value=''">✖</button>
+      </div>
+    </div>
 
-            try {
-                const response = await fetch('/predict', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ food, storage })
-                });
-                const data = await response.json();
+    <!-- Generate Button -->
+    <button class="generate-btn" onclick="generatePrediction()">GENERATE</button>
 
-                if (response.ok) {
-                    document.getElementById('result').innerText = 
-                        `Predicted shelf life for ${data.food} (stored in ${data.storage}): ${data.prediction} days`;
-                    document.getElementById('result').style.display = 'block';
-                } else {
-                    document.getElementById('error').innerText = data.error || 'Something went wrong';
-                    document.getElementById('error').style.display = 'block';
-                }
-            } catch (err) {
-                document.getElementById('error').innerText = 'Error connecting to server';
-                document.getElementById('error').style.display = 'block';
-            }
+    <!-- Blue Result Box -->
+    <div class="result-box" id="result">
+      Available item predictions will appear here...
+    </div>
+
+    <!-- Frog image -->
+    <div class="frog">
+      <img src="{{ url_for('static', filename='images/frog.png') }}" alt="Frog Thinking">
+    </div>
+  </div>
+
+  <script>
+    async function generatePrediction() {
+      const food = document.getElementById('food').value.trim();
+      const storage = document.getElementById('storage').value;
+      const resultBox = document.getElementById('result');
+
+      if (!food || !storage) {
+        resultBox.textContent = "⚠️ Please select storage and type a food item.";
+        return;
+      }
+
+      resultBox.textContent = "⏳ Predicting shelf life...";
+
+      try {
+        const response = await fetch('/predict', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ food, storage })
         });
-    </script>
+
+        const data = await response.json();
+
+        if (response.ok) {
+          resultBox.textContent = 
+            `Predicted shelf life for ${data.food} (stored in ${data.storage}): ${data.prediction} days`;
+        } else {
+          resultBox.textContent = data.error || "Something went wrong.";
+        }
+      } catch (err) {
+        resultBox.textContent = "Error connecting to server.";
+      }
+    }
+  </script>
 </body>
 </html>
